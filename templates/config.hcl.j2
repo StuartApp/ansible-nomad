@@ -1,0 +1,73 @@
+log_level = "{{ nomad_log_level }}"
+data_dir = "{{ nomad_data_dir }}"
+datacenter = "{{ nomad_datacenter }}"
+data_dir = "{{ nomad_data_dir}}"
+
+{% if nomad_server_enabled %}
+### Server ###
+server {
+    enabled = true
+{% if nomad_server_bootstrap_expect > 0 %}
+    bootstrap_expect = {{ nomad_server_bootstrap_expect }}
+{% endif %}
+{% if nomad_server_encrypt != "" %}
+    encrypt = "{{ nomad_server_encrypt }}"
+{% endif %}
+}
+{% endif %}
+
+{% if nomad_client_enabled %}
+### Client ###
+client {
+    enabled = true
+{% if nomad_client_node_class != "" %}
+    node_class = "{{ nomad_client_node_class }}"
+{% endif %}
+}
+{% endif %}
+
+### Consul ###
+consul {
+    address = "{{ nomad_consul_address }}"
+
+    server_service_name = "{{ nomad_consul_server_service_name }}"
+    client_service_name = "{{ nomad_consul_client_service_name }}"
+
+    auto_advertise = {{ nomad_consul_auto_advertise }}
+
+    server_auto_join = {{ nomad_consul_server_auto_join }}
+    client_auto_join = {{ nomad_consul_client_auto_join }}
+
+{% if nomad_consul_ssl %}
+    ca_file = "{{ nomad_consul_ca_file }}"
+    cert_file = "{{ nomad_consul_cert_file }}"
+    key_file = "{{ nomad_consul_key_file }}"
+    ssl = true
+{% endif %}
+
+{% if nomad_consul_token != "" %}
+    token = "{{ nomad_consul_token }}"
+{% endif %}
+}
+
+{% if nomad_tls_http == "true" or nomad_tls_rpc == "true" %}
+tls {
+  http = {{ nomad_tls_http }}
+  rpc = {{ nomad_tls_rpc }}
+  verify_https_client = {{ nomad_tls_verify_https_client }}
+  verify_server_hostname = {{ nomad_tls_server_hostname }}
+
+  ca_file = "{{ nomad_tls_ca_file }}"
+  cert_file = "{{ nomad_tls_cert_file }}"
+  key_file = "{{ nomad_tls_key_file }}"
+}
+{% endif %}
+
+{% if nomad_acl_enabled == "true" %}
+acl {
+    nomad_acl_enabled = {{ nomad_acl_enabled }}
+    nomad_acl_token_ttl: "{{ nomad_acl_token_ttl }}"
+    nomad_acl_policy_ttl: "{{ nomad_acl_policy_ttl }}"
+}
+{% endif %}
+

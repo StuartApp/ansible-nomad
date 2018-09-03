@@ -1,0 +1,50 @@
+---
+
+nomad_version: 0.7.0
+nomad_os: linux
+nomad_arch: amd64
+nomad_url: "https://releases.hashicorp.com/nomad/{{ nomad_version }}/nomad_{{ nomad_version }}_{{ nomad_os }}_{{ nomad_arch }}.zip"
+nomad_configdir: /etc/nomad
+nomad_configdir_ssl: "{{ nomad_configdir }}/ssl"
+
+nomad_user: root
+nomad_group: bin
+
+nomad_service_execstartpre: []
+
+nomad_datacenter: "dc1"
+nomad_region: "global"
+nomad_log_level: "INFO"
+nomad_data_dir: "/var/lib/nomad"
+
+nomad_server_enabled: false
+nomad_server_bootstrap_expect: 0
+nomad_server_encrypt: ""
+
+nomad_consul_address: "127.0.0.1:8500"
+nomad_consul_server_service_name: "nomad"
+nomad_consul_client_service_name: "nomad-client"
+nomad_consul_auto_advertise: "true"
+nomad_consul_server_auto_join: "true"
+nomad_consul_client_auto_join: "true"
+nomad_consul_ca_file: "{{ nomad_configdir }}/ssl/ca.crt"
+nomad_consul_cert_file: "{{ nomad_configdir }}/ssl/client.pem"
+nomad_consul_key_file: "{{ nomad_configdir }}/ssl/client.key"
+nomad_consul_ssl: false
+nomad_consul_token: ""
+
+nomad_tls_http: "true"
+nomad_tls_rpc: "true"
+nomad_tls_verify_https_client: "false"
+nomad_tls_server_hostname: "false"
+nomad_tls_ca_file: "{{ nomad_configdir }}/ssl/ca.crt"
+nomad_tls_cert_file: "{{ nomad_configdir }}/ssl/server.crt"
+nomad_tls_key_file: "{{ nomad_configdir }}/ssl/server.key"
+
+nomad_client_enabled: "true"
+nomad_client_node_class: ""
+
+nomad_acl_enabled: "true"
+nomad_acl_token_ttl: 30s
+nomad_acl_policy_ttl: 30s
+

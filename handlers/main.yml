@@ -1,0 +1,13 @@
+---
+
+- name: restart nomad
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: nomad
+
+- name: start nomad
+  systemd:
+    state: started
+    daemon_reload: yes
+    name: nomad

@@ -1,0 +1,24 @@
+---
+
+- name: Create configuration dirs
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+    owner: "{{ nomad_user }}"
+    group: "{{ nomad_group }}"
+  with_items:
+    - "{{ nomad_configdir }}"
+    - "{{ nomad_configdir_ssl }}"
+    - "/var/run/nomad"
+    - "{{ nomad_data_dir }}"
+
+- name: Setup configuration
+  template:
+    src: config.hcl.j2
+    dest: "{{ nomad_configdir }}/config.hcl"
+    owner: "{{ nomad_user }}"
+    group: "{{ nomad_group }}"
+    mode: 0600
+  notify: restart nomad
+

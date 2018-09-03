@@ -1,0 +1,36 @@
+### BEGIN INIT INFO
+# Provides:          nomad
+# Required-Start:    $local_fs $remote_fs
+# Required-Stop:     $local_fs $remote_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Nomad agent
+# Description:       Nomad service discovery framework
+### END INIT INFO
+
+[Unit]
+Description=Nomad agent
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+User={{ nomad_user }}
+Group={{ nomad_group }}
+PIDFile=/var/run/nomad/nomad.pid
+PermissionsStartOnly=true
+ExecStartPre=-/bin/mkdir -p /var/run/nomad
+ExecStartPre=-/bin/mkdir -p "{{ nomad_data_dir }}"
+ExecStartPre=/bin/chown -R {{ nomad_user }}:{{ nomad_group }} /var/run/nomad "{{ nomad_data_dir }}"
+{% for execstartpre in nomad_service_execstartpre %}
+ExecStartPre={{ execstartpre }}
+{% endfor %}
+ExecStart=/usr/local/bin/nomad agent \
+    -config={{ nomad_configdir }} \
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+KillSignal=SIGTERM
+Restart=on-failure
+RestartSec=42s
+
+[Install]
+WantedBy=multi-user.target
